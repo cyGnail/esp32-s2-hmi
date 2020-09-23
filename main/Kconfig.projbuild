@@ -1,0 +1,79 @@
+menu "Provisioning Confuguration"
+    choice
+        prompt "Use example Wi-Fi credential or not"
+
+        config USE_EXAMPLE_WIFI_CONFIG
+            bool "Use example Wi-Fi credential"
+            help
+                Use example Wi-Fi SSID and PSWD
+
+        config USE_WIFI_PROV
+            bool "Use Wi-Fi provisioning"
+            help
+                Use Wi-Fi provisioning to get Wi-Fi credential
+    endchoice
+
+    menu "Wi-Fi Credential"
+        if USE_EXAMPLE_WIFI_CONFIG
+            config EXAMPLE_WIFI_SSID
+                string "WiFi SSID"
+                default "esp_ssid"
+                help
+                    SSID (network name) for the example to connect to.
+
+            config EXAMPLE_WIFI_PASSWORD
+                string "WiFi Password"
+                default "esp_pswd"
+                help
+                    WiFi password (WPA or WPA2) for the example to use.
+        endif
+    endmenu
+
+    menu "Provisioning Scheme"
+        if USE_WIFI_PROV
+            config PROV_SOFTAP_BLE
+                bool "Use SoftAP / BLE Provisioning"
+                default y
+
+            if PROV_SOFTAP_BLE
+                choice PROV_TRANSPORT
+                    bool "Provisioning Transport"
+                    default PROV_TRANSPORT_BLE
+                    help
+                        Wi-Fi provisioning component offers both, SoftAP and BLE transports. Choose any one.
+
+                    config PROV_TRANSPORT_BLE
+                        bool "BLE"
+                        select BT_ENABLED
+                        depends on IDF_TARGET_ESP32
+                    config PROV_TRANSPORT_SOFTAP
+                        bool "Soft AP"
+                endchoice
+
+                config PROV_TRANSPORT
+                    int
+                    default 1 if PROV_TRANSPORT_BLE
+                    default 2 if PROV_TRANSPORT_SOFTAP
+            endif
+
+            config PROV_SCHEME_SMARTCONFIG
+                bool "Smart Config"
+                default n
+
+            if PROV_SCHEME_SMARTCONFIG
+                choice
+                    prompt "Smart Config Protocol"
+
+                    config PROV_SMARTCONFIG_ESPTOUCH
+                        bool "ESP-Touch"
+
+                    config PROV_SMARTCONFIG_AIRKISS
+                        bool "AirKiss"
+
+                    config PROV_SMARTCONFIG_ESPTOUCH_AIRKISS
+                        bool "ESP-Touch and Airkiss"
+                endchoice
+            endif
+        endif
+    endmenu
+endmenu
