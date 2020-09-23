@@ -73,6 +73,8 @@ extern "C" {
 
     extern char userKey[10];
 
+    extern int buffer[64];
+
     void initialize();
 
     void trans();

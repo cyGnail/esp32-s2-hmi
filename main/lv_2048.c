@@ -31,7 +31,7 @@ static int interval = 2;
 int gameArray[64] = { 0 };     //global parameter
 static int transmit[64] = { 0 };   //transmit matrix
 static int k[8] = { 0 };
-static int buffer[64] = { 0 };
+int buffer[64] = { 0 };
 
 int dimension = 4;            //global parameter
 int winNumber = 2048;
@@ -677,7 +677,7 @@ static void btn_event_cb(lv_obj_t* btn, lv_event_t event)
     static const char* btns3[] = { "Record","Continue","" };
 
     if (event == LV_EVENT_CLICKED) {
-        for(int i=0;i<dimension;i++)
+        for (int i = 0; i < dimension; i++)
             for (int j = 0; j < dimension; j++)            
                 buffer[i + j * dimension] = gameArray[i + j * dimension];
 

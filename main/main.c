@@ -185,6 +185,10 @@ void gui_task(void *arg)
             {
                 if (fabs(deltax) > SENSITIVE || fabs(deltay) > SENSITIVE)
                 {
+                    for (int i = 0; i < dimension; i++)
+                        for (int j = 0; j < dimension; j++)
+                            buffer[i + j * dimension] = gameArray[i + j * dimension];
+
                     if (fabs(deltax) > fabs(deltay))  //Horizontal
                     {
                         if (deltax > 0)  //Right
